@@ -1,0 +1,22 @@
+{
+  "name": "project-1-",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wigsters52/Project-1-.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wigsters52/Project-1-/issues"
+  },
+  "homepage": "https://github.com/wigsters52/Project-1-#readme",
+  "dependencies": {
+    "standard": "^12.0.1"
+  }
+}
