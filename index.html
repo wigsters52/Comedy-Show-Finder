@@ -1,21 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous"
+  />
+  <link href="https://vjs.zencdn.net/7.5.5/video-js.css" rel="stylesheet" />
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" type="text/css" href="assets/style/style.css"
+    <meta charset="utf-8" />
+
+    <title>Comedian Search</title>
   </head>
   <body>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="assets/javascript/index.js"></script>
+    <div class="container">
+      <div class="row">
+        <div
+          class="col-xl-12"
+          style="height: 120px; background-color: darkslateblue"
+        >
+          <h1
+            style="color: white; text-align: center;font-size: 50px; padding-top: 30px;"
+          >
+            Who is your Comedian?
+          </h1>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 30px; margin-bottom: 30x;">
+        <div
+          class="col-xl-12"
+          style="height: 250px; background-color: white; border: 2px solid black;"
+        >
+          <form id="form" class="form">
+            <input
+              id="searchComedian"
+              class=" searchTerm form-control form-control-lg"
+              type="text"
+              placeholder="Search Comedian"
+              style="margin-top: 30px;"
+            />
+            <input
+              id="zipCode"
+              class=" searchTerm form-control form-control-lg"
+              type="text"
+              placeholder="Zip Code"
+              style="margin-top: 30px;"
+            />
+            <button
+              style="margin-top: 10px;"
+              type="submit"
+              id="searchBtn"
+              class="btn btn-Search"
+            >
+              Search
+            </button>
+            <button
+              style="margin-top: 10px;"
+              type="submit"
+              class="btn btn-Clear Results"
+            >
+              Clear Results
+            </button>
+          </form>
+        </div>
+      </div>
+      <div id="top" class="row" style="margin-top: 30px; margin-bottom: 30x;">
+        <div
+          class="col-xl-12"
+          style="height: 400px; background-color: white; border: 2px solid black;"
+        >
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Venue</th>
+                <th scope="col">City</th>
+                <th scope="col">Price</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://vjs.zencdn.net/7.5.5/video.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script src="assets/javascript/index.js"></script>
   </body>
 </html>
