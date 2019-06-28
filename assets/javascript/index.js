@@ -2,9 +2,9 @@
 // const ticketMasterAPI = '0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc'
 let latLong = ''
 let sort = 'distance'
+const format = dateFns.format
 // const player = videojs('vid1', {})
 const select = id => document.getElementById(id)
-
 // Whatever type of html element needs to be created in the ("")
 const createEl = el => document.createElement(el)
 
@@ -16,8 +16,8 @@ const setEl = (el, text) => {
 }
 
 // Used to empty the table before a new search
-const empty = () => {
-  const el = select('tbody')
+const empty = element => {
+  const el = select(element)
   while (el.firstChild) {
     el.removeChild(el.firstChild)
   }
@@ -51,6 +51,7 @@ const onGeolocateError = error => {
 }
 
 // Gathers price range from API call if there is one else returns not available
+// Also links to page to purchase tickets
 const priceRange = (response, i) => {
   if (response._embedded.events[i].priceRanges) {
     const prices = createEl('td')
@@ -76,16 +77,7 @@ const priceRange = (response, i) => {
   }
 }
 
-// const prices = (response, i) => {
-//   const prices = createEl('td')
-//   const price2 = createEl('a')
-//   price2.setAttribute('href', 'https://www.google.com/')
-//   price2.innerHTML = 'prices'
-//   prices.append(price2)
-//   return prices
-// }
-
-// appends all the created elements to the row and inserts into table
+// Appends all the created elements to the row and inserts into table
 const tableEntry = (response, i) => {
   const row = createEl('tr')
   const venue = setEl(
@@ -96,14 +88,20 @@ const tableEntry = (response, i) => {
     'td',
     response._embedded.events[i]._embedded.venues[0].city.name
   )
-  const date = setEl('td', response._embedded.events[i].dates.start.localDate)
-  const time = setEl('td', response._embedded.events[i].dates.start.localTime)
+  const date = setEl(
+    'td',
+    format(response._embedded.events[i].dates.start.localDate, 'MMMM, Do YYYY')
+  )
+  const time = setEl(
+    'td',
+    format(response._embedded.events[i].dates.start.dateTime, 'h:mm aa')
+  )
   const price = priceRange(response, i)
   row.append(venue, city, date, time, price)
   select('tbody').append(row)
 }
 
-//
+// Ajax request and for loop to append data to the table
 const ticketRequest = () => {
   const comedianName = select('searchComedian').value
   const querylUrl = `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${comedianName}&latlong=${latLong}&classificationName=comedy&size=10&sort=${sort},asc&apikey=0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc`
@@ -117,6 +115,7 @@ const ticketRequest = () => {
       select('tbody').append(na)
     } else {
       for (let i = 0; i < response._embedded.events.length; i++) {
+        // console.log(response._embedded.events[i].dates.start)
         tableEntry(response, i)
       }
       select('form').reset()
@@ -124,9 +123,10 @@ const ticketRequest = () => {
   })
 }
 
+// Listens on form for submit runs ajax request and empties any data out of the table
 select('form').addEventListener('submit', function (event) {
   event.preventDefault()
-  empty()
+  empty('tbody')
   ticketRequest()
 })
 
