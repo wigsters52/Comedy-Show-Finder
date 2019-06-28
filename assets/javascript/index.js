@@ -1,6 +1,7 @@
-// search box value
-// append api information to table
-const youtubeApi = 'AIzaSyDdO6zQx64o6U30fQa4U_RDaRaepGAY - Uk'
+// const youtubeApi = 'AIzaSyDdO6zQx64o6U30fQa4U_RDaRaepGAY - Uk'
+// const ticketMasterAPI = '0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc'
+let latLong = ''
+let sort = 'distance'
 // const player = videojs('vid1', {})
 const select = id => document.getElementById(id)
 
@@ -14,74 +15,139 @@ const setEl = (el, text) => {
   return element
 }
 
+// Used to empty the table before a new search
+const empty = () => {
+  const el = select('tbody')
+  while (el.firstChild) {
+    el.removeChild(el.firstChild)
+  }
+}
+
+// Uses html geolocation to filter search results based on closest
+const geoLocate = () => {
+  if (window.navigator && window.navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      onGeolocateSuccess,
+      onGeolocateError
+    )
+  }
+}
+
+const onGeolocateSuccess = coordinates => {
+  latLong = coordinates.coords.latitude + ',' + coordinates.coords.longitude
+  sort = 'distance'
+}
+
+const onGeolocateError = error => {
+  sort = 'date'
+  console.warn(error.code, error.message)
+  if (error.code === 1) {
+    // they said no
+  } else if (error.code === 2) {
+    // position unavailable
+  } else if (error.code === 3) {
+    // timeout
+  }
+}
+
+// Gathers price range from API call if there is one else returns not available
+const priceRange = (response, i) => {
+  if (response._embedded.events[i].priceRanges) {
+    const prices = createEl('td')
+    const priceLink = createEl('a')
+    priceLink.setAttribute('href', response._embedded.events[i].url)
+    priceLink.setAttribute('target', 'blank')
+    priceLink.innerHTML =
+      '$' +
+      response._embedded.events[i].priceRanges[0].min +
+      ' - ' +
+      '$' +
+      response._embedded.events[i].priceRanges[0].max
+    prices.append(priceLink)
+    return prices
+  } else {
+    const prices = createEl('td')
+    const priceLink = createEl('a')
+    priceLink.setAttribute('href', response._embedded.events[i].url)
+    priceLink.setAttribute('target', 'blank')
+    priceLink.innerHTML = 'Price Unavailable'
+    prices.append(priceLink)
+    return prices
+  }
+}
+
+// const prices = (response, i) => {
+//   const prices = createEl('td')
+//   const price2 = createEl('a')
+//   price2.setAttribute('href', 'https://www.google.com/')
+//   price2.innerHTML = 'prices'
+//   prices.append(price2)
+//   return prices
+// }
+
 // appends all the created elements to the row and inserts into table
 const tableEntry = (response, i) => {
   const row = createEl('tr')
-  const venue = setEl('td', response[i].venue.name)
-  const city = setEl('td', response[i].venue.city)
-  const price = setAttr(response, i)
-  row.append(venue, city, price)
+  const venue = setEl(
+    'td',
+    response._embedded.events[i]._embedded.venues[0].name
+  )
+  const city = setEl(
+    'td',
+    response._embedded.events[i]._embedded.venues[0].city.name
+  )
+  const date = setEl('td', response._embedded.events[i].dates.start.localDate)
+  const time = setEl('td', response._embedded.events[i].dates.start.localTime)
+  const price = priceRange(response, i)
+  row.append(venue, city, date, time, price)
   select('tbody').append(row)
-  console.log(setAttr)
 }
 
-const setAttr = (response, i) => {
-  const btn = createEl('td')
-  const btn1 = createEl('a')
-  btn1.setAttribute('href', response[i].url)
-  btn.append(btn1)
-}
-
+//
 const ticketRequest = () => {
   const comedianName = select('searchComedian').value
-  const postalCode = select('zipCode').value
-  const querylUrl =
-    'https://rest.bandsintown.com/artists/' +
-    comedianName +
-    '/events' +
-    '?app_id=codingbootcamp'
-  // `https://app.ticketmaster.com/discovery/v1/events.json?keyword=${comedianName}&apikey=0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc`
-  // 'https://app.ticketmaster.com/discovery/v2/classifications/genres/KnvZfZ7vA71.json?countryCode=US&keyword=' +
-  // comedianName +
-  // 'classificationName=comedy&postalCode=' +
-  // postalCode +
-  // 'apikey=0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc'
-  console.log(comedianName)
+  const querylUrl = `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${comedianName}&latlong=${latLong}&classificationName=comedy&size=10&sort=${sort},asc&apikey=0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc`
   $.ajax({
     type: 'GET',
     url: querylUrl
   }).then(function (response) {
-    for (let i = 0; i < 10; i++) {
-      tableEntry(response, i)
+    console.log(response._embedded.events[0].name)
+    if (response.page.totalElements === 0) {
+      const na = setEl('td', 'Nothing Available')
+      select('tbody').append(na)
+    } else {
+      for (let i = 0; i < response._embedded.events.length; i++) {
+        tableEntry(response, i)
+      }
+      select('form').reset()
     }
-    console.log(response)
   })
 }
 
-// function displayComedianInfo (comedian) {
-//  var queryURL = 'https://rest.bandsintown.com/artists/' + comedian + '?app_id=codingbootcamp'
-//  $.ajax({
-//    url: queryURL,
-//    method: 'GET'
-
-// const ticketRequest = $.ajax({
-//   type: 'GET',
-//   url: querylUrl,
-//   async: true,
-//   dataType: 'json',
-//   success: function (json) {
-//     console.log(json)
-//     // Parse the response.
-//     // Do other things.
-//   },
-//   error: function (xhr, status, err) {
-//     // This time, we do not end up here!
-//   }
-// })
-
 select('form').addEventListener('submit', function (event) {
   event.preventDefault()
+  empty()
   ticketRequest()
-  // console.log(comedianName, postalCode)
-  select('form').reset()
 })
+
+geoLocate()
+
+// const videoAppend = () => {
+//   const vid = createEl('video-js')
+//   vid.setAttribute('src', 'https://youtu.be/C0DPdy98e4c')
+//   select('video').append(vid)
+// }
+// videoAppend()
+// console.log(response._embedded.events[i]._embedded.venues[0].name)
+// console.log(response._embedded.events[i]._embedded.venues[0].city.name)
+// console.log(response._embedded.events[i].dates.start.localDate)
+// console.log(response._embedded.events[i].dates.start.localTime)
+// console.log(response._embedded.events[i].priceRanges[0].min)
+// console.log(response._embedded.events[i].priceRanges[0].max)
+
+// const setAttr = (response, i) => {
+//   const btn = createEl('td')
+//   const btn1 = createEl('a')
+//   btn1.setAttribute('href', response[i].url)
+//   btn.append(btn1)
+// }
