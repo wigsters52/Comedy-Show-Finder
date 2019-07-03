@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', event => {
   // const youtubeApi = 'AIzaSyDdO6zQx64o6U30fQa4U_RDaRaepGAY - Uk'
   // const ticketMasterAPI = '0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc'
@@ -61,7 +60,7 @@ document.addEventListener('DOMContentLoaded', event => {
   const onGeolocateError = error => {
     sort = 'date'
     console.warn(error.code, error.message)
-
+  }
 
   // Fires on page load to get location by IP address
   const IPLocate = () => {
@@ -118,10 +117,6 @@ document.addEventListener('DOMContentLoaded', event => {
       'td',
       response._embedded.events[i]._embedded.venues[0].name
     )
-    // const city = setEl(
-    //   'td',
-    //   response._embedded.events[i]._embedded.venues[0].city.name
-    // )
     const date = setEl(
       'td',
       format(
