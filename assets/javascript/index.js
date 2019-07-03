@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', event => {
   const onGeolocateError = error => {
     sort = 'date'
     console.warn(error.code, error.message)
-  }
+
 
   // Fires on page load to get location by IP address
   const IPLocate = () => {
