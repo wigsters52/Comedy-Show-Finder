@@ -1,0 +1,11 @@
+{
+    "workbench.colorTheme": "Visual Studio Dark",
+    "git.enableSmartCommit": true,
+    "[html]": {
+        "editor.defaultFormatter": "HookyQR.beautify"
+    },
+    "standard.autoFixOnSave": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "chenxsan.vscode-standardjs"
+}
