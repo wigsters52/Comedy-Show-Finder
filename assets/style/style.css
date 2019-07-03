@@ -1,0 +1,38 @@
+html,body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: url(../images/h82erK.jpg) no-repeat center center fixed;
+  background-size: cover;
+}
+
+img {
+  width: auto;
+  height: 100%;
+}
+
+.header {
+  height: 20rem;
+margin: 0 auto;
+}
+
+.container {
+  flex: 1 0 auto;
+}
+
+iframe {
+  border-radius: 5px;
+}
+
+.table {
+border-radius: 5px;
+}
+
+.footer {
+  text-align: center;
+  flex-shrink: 0;
+  color: #ffffff;
+}
