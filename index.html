@@ -4,19 +4,78 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <link href="https://vjs.zencdn.net/7.5.5/video-js.css" rel="stylesheet" />
+    <title>Comedian Search</title>
     <link
       rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" type="text/css" href="assets/style/style.css"
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.6/plyr.css" />
+    <link rel="stylesheet" type="text/css" href="assets/style/style.css" />
   </head>
   <body>
-    <script src="https://vjs.zencdn.net/7.5.5/video.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="assets/javascript/index.js"></script>
+    <header class="header">
+      <img src="assets/images/13628.svg" alt="Neon Comedy Sign" />
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="player plyr__video-embed" id="player"></div>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-3 col-sm-12 my-auto">
+          <form id="form" class="form">
+            <div class="form-group">
+              <input
+                id="searchComedian"
+                class=" searchTerm form-control"
+                type="text"
+                placeholder="Search Comedian"
+              />
+            </div>
+            <div class="form-group">
+              <input
+                id="searchCity"
+                class="form-control"
+                type="text"
+                placeholder="City"
+              />
+            </div>
+            <button type="submit" id="searchBtn" class="btn">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+      <div id="top" class="row">
+        <div class="col-md-12 px-0 mt-4">
+          <table id="table" class="table table-dark table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Comedian</th>
+                <th scope="col">Venue</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Price</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">Copyright &copy; 2019</footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.js"></script>
+    <script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script src="assets/javascript/index.js"></script>
+    <script
+      src="https://apis.google.com/js/client.js?onload=onClientLoad"
+      type="text/javascript"
+    ></script>
   </body>
 </html>
+
+<!-- Header attribute author <a href="https://www.freepik.com/free-photos-vectors/banner">Banner vector created by katemangostar - www.freepik.com</a> -->
