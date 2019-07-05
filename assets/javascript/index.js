@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', event => {
   // const youtubeApi = 'AIzaSyDdO6zQx64o6U30fQa4U_RDaRaepGAY - Uk'
   // const ticketMasterAPI = '0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc'
   let latLong = ''
-  let sort = 'date'
   const format = dateFns.format
 
   const randomizer = max => {
@@ -53,12 +52,10 @@ document.addEventListener('DOMContentLoaded', event => {
 
   const onGeolocateSuccess = coordinates => {
     latLong = coordinates.coords.latitude + ',' + coordinates.coords.longitude
-    sort = 'distance'
     ticketRequest()
   }
 
   const onGeolocateError = error => {
-    sort = 'date'
     console.warn(error.code, error.message)
   }
 
@@ -70,12 +67,10 @@ document.addEventListener('DOMContentLoaded', event => {
         'https://api.ipdata.co?api-key=b10d7fd45c8c314294f1e47b52ab9bef1bf60bb2056164abfdd12865'
     }).then(
       function success (response) {
-        sort = 'distance'
         latLong = response.latitude + ',' + response.longitude
         ticketRequest()
       },
       function fail (error) {
-        sort = 'date'
         console.warn(error.code, error.message)
         geoLocate()
       }
@@ -148,21 +143,24 @@ document.addEventListener('DOMContentLoaded', event => {
   const ticketRequest = () => {
     const comedianName = select('searchComedian').value
     const city = select('searchCity').value
-    const querylUrl = `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${comedianName}&latlong=${latLong}&city=${city}&classificationName=comedy&size=10&sort=${sort},asc&apikey=0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc`
+    const querylUrl = `https://app.ticketmaster.com/discovery/v2/events.json?keyword=${comedianName}&latlong=${latLong}&city=${city}&genreId=KnvZfZ7vAe1&size=10&sort=distance,date,asc&apikey=0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc`
     $.ajax({
       type: 'GET',
       url: querylUrl
-    }).then(function (response) {
-      if (response.page.totalElements === 0) {
+    }).then(function (ticketResponse) {
+      if (ticketResponse.page.totalElements === 0) {
         showElement('table', 'table')
         noData()
         select('form').reset()
       } else {
-        const randomComedian = randomizer(response._embedded.events.length)
-        videoFunction(response._embedded.events[randomComedian].name)
-        for (let i = 0; i < response._embedded.events.length; i++) {
+        // console.log(ticketResponse._embedded.events)
+        const randomComedian = randomizer(
+          ticketResponse._embedded.events.length
+        )
+        videoFunction(ticketResponse._embedded.events[randomComedian].name)
+        for (let i = 0; i < ticketResponse._embedded.events.length; i++) {
           showElement('table', 'table')
-          tableEntry(response, i)
+          tableEntry(ticketResponse, i)
         }
         select('form').reset()
       }
@@ -170,27 +168,15 @@ document.addEventListener('DOMContentLoaded', event => {
   }
 
   // Takes video Id from API call and appends it to the page
-  const videoAppend = response => {
+  const videoAppend = videoId => {
     showElement('player', 'block')
     const vid = createEl('iframe')
-    vid.setAttribute('src', `https://www.youtube.com/embed/${response}`)
+    vid.setAttribute('src', `https://www.youtube.com/embed/${videoId}`)
     select('player').append(vid)
   }
 
-  // hideElement('player')
-
-  // player.source = {
-  //   type: 'video',
-  //   sources: [
-  //     {
-  //       src: 'bTqVqk7FSmY',
-  //       provider: 'youtube'
-  //     }
-  //   ]
-  // }
-
   const videoFunction = randomComedian => {
-    const key = 'AIzaSyDc9k0Rzdqb36ZC_q95ruTMOF9yA51l8JA'
+    const key = 'AIzaSyDdO6zQx64o6U30fQa4U_RDaRaepGAY-Uk'
     const comedianName = select('searchComedian').value || randomComedian
     const URL = 'https://www.googleapis.com/youtube/v3/search'
     let options = {
@@ -212,10 +198,16 @@ document.addEventListener('DOMContentLoaded', event => {
     // Uses the response to load the video and append it to the page
     function loadVideo () {
       $.getJSON(URL, options, function (response) {
-        console.log(response)
-        videoAppend(
-          response.items[randomizer(response.items.length)].id.videoId
-        )
+        // console.log(response)
+        if (response.items.length === 0) {
+          videoAppend('j65jhGZUJv8')
+          // console.log('No Video Found')
+        } else {
+          // console.log(response.items)
+          videoAppend(
+            response.items[randomizer(response.items.length)].id.videoId
+          )
+        }
       })
     }
     loadVideo()
@@ -229,6 +221,7 @@ document.addEventListener('DOMContentLoaded', event => {
     ticketRequest()
     videoFunction()
   })
+  hideElement('player')
   hideElement('table')
   IPLocate()
 })
