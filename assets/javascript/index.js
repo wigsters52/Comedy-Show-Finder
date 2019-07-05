@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', event => {
-  // const youtubeApi = 'AIzaSyDdO6zQx64o6U30fQa4U_RDaRaepGAY - Uk'
-  // const ticketMasterAPI = '0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc'
+  //  youtubeApi = 'AIzaSyDdO6zQx64o6U30fQa4U_RDaRaepGAY - Uk'
+  //  ticketMasterAPI = '0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc'
   let latLong = ''
   const format = dateFns.format
 
@@ -107,24 +107,23 @@ document.addEventListener('DOMContentLoaded', event => {
   // Appends all the created elements to the row and inserts into table
   const tableEntry = (response, i) => {
     const row = createEl('tr')
-    const name = setEl('td', response._embedded.events[i].name)
-    const venue = setEl(
-      'td',
-      response._embedded.events[i]._embedded.venues[0].name
-    )
-    const date = setEl(
-      'td',
-      format(
-        response._embedded.events[i].dates.start.localDate,
-        'MMMM, Do YYYY'
-      )
-    )
-    const time = setEl(
-      'td',
-      format(response._embedded.events[i].dates.start.dateTime, 'h:mm aa')
-    )
-    const price = priceRange(response, i)
-    row.append(name, venue, date, time, price)
+    const trow = {
+      name: setEl('td', response._embedded.events[i].name),
+      venue: setEl('td', response._embedded.events[i]._embedded.venues[0].name),
+      date: setEl(
+        'td',
+        format(
+          response._embedded.events[i].dates.start.localDate,
+          'MMMM, Do YYYY'
+        )
+      ),
+      time: setEl(
+        'td',
+        format(response._embedded.events[i].dates.start.dateTime, 'h:mm aa')
+      ),
+      price: priceRange(response, i)
+    }
+    row.append(trow.name, trow.venue, trow.date, trow.time, trow.price)
     select('tbody').append(row)
   }
 
