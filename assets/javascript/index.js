@@ -66,11 +66,11 @@ document.addEventListener('DOMContentLoaded', event => {
       url:
         'https://api.ipdata.co?api-key=b10d7fd45c8c314294f1e47b52ab9bef1bf60bb2056164abfdd12865'
     }).then(
-      function success (response) {
+      function success(response) {
         latLong = response.latitude + ',' + response.longitude
         ticketRequest()
       },
-      function fail (error) {
+      function fail(error) {
         console.warn(error.code, error.message)
         geoLocate()
       }
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', event => {
     $.ajax({
       type: 'GET',
       url: querylUrl
-    }).then(function (ticketResponse) {
+    }).then(function(ticketResponse) {
       if (ticketResponse.page.totalElements === 0) {
         showElement('table', 'table')
         noData()
@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded', event => {
     showElement('player', 'block')
     const vid = createEl('iframe')
     vid.setAttribute('src', `https://www.youtube.com/embed/${videoId}`)
+    vid.setAttribute('allowfullscreen', '')
     select('player').append(vid)
   }
 
@@ -183,7 +184,6 @@ document.addEventListener('DOMContentLoaded', event => {
       key: key,
       q: comedianName + 'stand up',
       maxResults: 20,
-      // 'order': 'relevance',
       type: 'video',
       safeSearch: 'none',
       videoCategory: 'comedy',
@@ -195,8 +195,8 @@ document.addEventListener('DOMContentLoaded', event => {
       // 'channelType':
     }
     // Uses the response to load the video and append it to the page
-    function loadVideo () {
-      $.getJSON(URL, options, function (response) {
+    function loadVideo() {
+      $.getJSON(URL, options, function(response) {
         // console.log(response)
         if (response.items.length === 0) {
           videoAppend('j65jhGZUJv8')
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', event => {
   }
 
   // Listens on form for submit runs ajax request and empties any data out of the table
-  select('form').addEventListener('submit', function (event) {
+  select('form').addEventListener('submit', function(event) {
     event.preventDefault()
     empty('tbody')
     empty('player')
