@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', event => {
-  //  youtubeApi = 'AIzaSyDdO6zQx64o6U30fQa4U_RDaRaepGAY - Uk'
-  //  ticketMasterAPI = '0Dxr1ahmvB1MnD2htrHAWLPBmNAXIbmc'
   let latLong = ''
   const format = dateFns.format
 
@@ -66,11 +64,11 @@ document.addEventListener('DOMContentLoaded', event => {
       url:
         'https://api.ipdata.co?api-key=b10d7fd45c8c314294f1e47b52ab9bef1bf60bb2056164abfdd12865'
     }).then(
-      function success(response) {
+      function success (response) {
         latLong = response.latitude + ',' + response.longitude
         ticketRequest()
       },
-      function fail(error) {
+      function fail (error) {
         console.warn(error.code, error.message)
         geoLocate()
       }
@@ -146,7 +144,7 @@ document.addEventListener('DOMContentLoaded', event => {
     $.ajax({
       type: 'GET',
       url: querylUrl
-    }).then(function(ticketResponse) {
+    }).then(function (ticketResponse) {
       if (ticketResponse.page.totalElements === 0) {
         showElement('table', 'table')
         noData()
@@ -179,7 +177,7 @@ document.addEventListener('DOMContentLoaded', event => {
     const key = 'AIzaSyDdO6zQx64o6U30fQa4U_RDaRaepGAY-Uk'
     const comedianName = select('searchComedian').value || randomComedian
     const URL = 'https://www.googleapis.com/youtube/v3/search'
-    let options = {
+    const options = {
       part: 'snippet',
       key: key,
       q: comedianName + 'stand up',
@@ -188,19 +186,15 @@ document.addEventListener('DOMContentLoaded', event => {
       safeSearch: 'none',
       videoCategory: 'comedy',
       topicId: '/m/05qjc'
-      // 'videoCategoryId': 'comedy'
-      // 'order': 'videoCount',
-      // 'relevanceLanguage': 'en',
-      // 'regionCode': 'US'
-      // 'channelType':
     }
+
     // Uses the response to load the video and append it to the page
-    function loadVideo() {
-      $.getJSON(URL, options, function(response) {
-        // console.log(response)
+    function loadVideo () {
+      $.getJSON(URL, options, response => {
+        console.log(`getting response ${response}`)
         if (response.items.length === 0) {
           videoAppend('j65jhGZUJv8')
-          // console.log('No Video Found')
+          console.log('No Video Found')
         } else {
           // console.log(response.items)
           videoAppend(
@@ -213,7 +207,7 @@ document.addEventListener('DOMContentLoaded', event => {
   }
 
   // Listens on form for submit runs ajax request and empties any data out of the table
-  select('form').addEventListener('submit', function(event) {
+  select('form').addEventListener('submit', function (event) {
     event.preventDefault()
     empty('tbody')
     empty('player')
